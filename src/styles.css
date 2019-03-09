@@ -1,0 +1,88 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.container {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+
+  margin: 0 0 5px 0;
+  padding: 10px 0 15px;
+
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  display: flex;
+  box-sizing: border-box;
+
+  /* 
+  --gutter: 10px;
+  display: grid;
+  grid-gap: var(--gutter);
+  grid-template-columns: var(--gutter);
+  grid-auto-flow: column;
+  grid-auto-columns: calc(100% - var(--gutter) * 4); */
+}
+
+.container::before,
+.container::after {
+  content: " ";
+  display: block;
+  flex: 0 0 10%;
+}
+
+.card-wrapper {
+  padding: 0 10px;
+  flex: 0 0 80%;
+  box-sizing: border-box;
+  scroll-snap-align: center;
+}
+
+.card {
+  background: white;
+  height: 100px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  padding: 10px;
+}
+
+button {
+  width: 100px;
+  border: 2px solid #000;
+}
+
+/* .container {
+  max-width: 350px;
+  display: flex;
+  width: 90%;
+  overflow: auto;
+  margin: 0 auto;
+  border: 2px solid red;
+  scroll-snap-type: x mandatory;
+  flex-flow: row nowrap;
+}
+
+.card {
+  width: 300px;
+  margin: 0 10px;
+  background: #888;
+  flex: 0 0 300px;
+  height: 200px;
+  box-shadow: 0 0 3px gray;
+  scroll-snap-align: center;
+}
+
+.card-sentry {
+  width: 100px;
+  margin: 0 10px;
+  background: #ddd;
+} */
