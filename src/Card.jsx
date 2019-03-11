@@ -9,9 +9,9 @@ export default class Card extends React.PureComponent {
   render() {
     const { id } = this.props;
     return (
-      <div className="card" key={id} style={style}>
-        <HeavyComponent />
-      </div>
+      <button className="card" key={id} style={style}>
+        Card {id}
+      </button>
     );
   }
 }
