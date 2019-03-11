@@ -23,14 +23,9 @@ body {
   scroll-behavior: smooth;
   display: flex;
   box-sizing: border-box;
-
-  /* 
-  --gutter: 10px;
-  display: grid;
-  grid-gap: var(--gutter);
-  grid-template-columns: var(--gutter);
-  grid-auto-flow: column;
-  grid-auto-columns: calc(100% - var(--gutter) * 4); */
+  /* hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
 .container::before,
@@ -38,6 +33,12 @@ body {
   content: " ";
   display: block;
   flex: 0 0 10%;
+}
+
+.container::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
 }
 
 .card-wrapper {

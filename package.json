@@ -1,11 +1,10 @@
 {
-  "name": "react-swipe-with-intersection-observer",
+  "name": "react-swipe-proof-of-concept",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
-    "@researchgate/react-intersection-observer": "0.7.4",
     "lodash": "4.17.11",
     "react": "16.8.3",
     "react-dom": "16.8.3",
