@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
 import Carousel from "./Carousel";
+// import Carousel from "./CarouselHooks";
 import Card from "./Card";
 
 import "./styles.css";
@@ -9,7 +10,7 @@ import "./styles.css";
 const listingIDs = ["a", "b", "c", "d"];
 
 function App() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(2);
 
   return (
     <div className="App">

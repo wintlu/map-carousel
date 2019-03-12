@@ -19,14 +19,15 @@ export default class Carousel extends React.Component {
         return;
       }
       const entry = inViewEntries[0];
-      const visibleIndex = Number(entry.target.getAttribute("data-index"));
-      this.onVisible(visibleIndex);
+      this.onVisible(Number(entry.target.getAttribute("data-index")));
     }, {
         root: this.container,
         threshold: 1.0
       });
     const count = React.Children.count(this.props.children);
     range(count).forEach(index => this.observer.observe(this.cardRefs[index]));
+
+    this.updateScroll();
   }
 
   componentWillUnmount() {
@@ -38,25 +39,31 @@ export default class Carousel extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.activeIndex !== this.props.activeIndex) {
-      if (this.visibleIndex !== this.props.activeIndex) {
-        this.transitioning = true;
-        const cardRef = this.cardRefs[this.props.activeIndex];
-        cardRef.scrollIntoView({
-          behavior: "smooth",
-          inline: "center"
-        });
-      }
+      this.updateScroll();
+    }
+  }
+
+  updateScroll(){
+    if (this.visibleIndex === this.props.activeIndex) {
+      this.transitioning = false;
+    } else {
+      this.transitioning = true;
+      const cardRef = this.cardRefs[this.props.activeIndex];
+      cardRef.scrollIntoView({
+        behavior: "smooth",
+        inline: "center"
+      });
     }
   }
 
   onVisible(i) {
     this.visibleIndex = i;
     if (this.transitioning) {
-      if (this.visibleIndex === this.activeIndex) {
+      if (this.visibleIndex === this.props.activeIndex) {
         this.transitioning = false;
       }
     } else {
-      if (this.visibleIndex !== this.activeIndex) {
+      if (this.visibleIndex !== this.props.activeIndex) {
         this.props.onActiveIndexChanged(this.visibleIndex);
       }
     }
@@ -68,7 +75,6 @@ export default class Carousel extends React.Component {
       <>
         <div
           className="container"
-          id="swipeable"
           ref={el => {
             this.container = el;
           }}
