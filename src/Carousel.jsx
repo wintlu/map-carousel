@@ -5,6 +5,12 @@ export default class Carousel extends React.Component {
   container = null;
   cardRefs = [];
   state = {};
+  transient = false;
+
+  static defaultProps = {
+    activeIndex: 0,
+    onActiveIndexChanged: () => undefined
+  };
 
   componentDidMount() {
     this.observer = new IntersectionObserver(this.handleIntersect, {
@@ -23,18 +29,25 @@ export default class Carousel extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.activeIndex !== this.state.activeIndex) {
-      const cardRef = this.cardRefs[this.state.activeIndex];
+    if (prevProps.activeIndex !== this.props.activeIndex) {
+      this.transient = true;
+      const cardRef = this.cardRefs[this.props.activeIndex];
       cardRef.scrollIntoView({
         behavior: "smooth",
         inline: "center"
       });
     }
+
+    // if (prevState.activeIndex !== this.state.activeIndex) {
+    //   const cardRef = this.cardRefs[this.state.activeIndex];
+    //   cardRef.scrollIntoView({
+    //     behavior: "smooth",
+    //     inline: "center"
+    //   });
+    // }
   }
 
   handleIntersect = entries => {
-    const { activeIndex } = this.state;
-
     // card width is 80% of container, so there's only one entry whose isIntersecting=== true
     const inViewEntries = entries.filter(e => e.isIntersecting);
     if (inViewEntries.length === 0) {
@@ -48,31 +61,44 @@ export default class Carousel extends React.Component {
 
     if (entry.isIntersecting) {
       const visibleIndex = Number(entry.target.getAttribute("data-index"));
-      if (this.transitioning && visibleIndex === activeIndex) {
-        this.transitioning = false;
-      } else if (!this.transitioning && visibleIndex !== activeIndex) {
-        this.setState({ activeIndex: visibleIndex });
+      const { activeIndex } = this.props;
+      if (this.transient) {
+        if (visibleIndex === activeIndex) {
+          this.transient = false;
+        }
+      } else {
+        if (visibleIndex !== activeIndex) {
+          this.props.onActiveIndexChanged(visibleIndex);
+        }
+        // this.transient = true;
       }
     }
+
+    // if (entry.isIntersecting) {
+    // const { activeIndex } = this.state;
+    //   const visibleIndex = Number(entry.target.getAttribute("data-index"));
+    //   if (this.transient && visibleIndex === activeIndex) {
+    //     //arrive the destination index
+    //     this.transient = false;
+    //   } else if (!this.transient && visibleIndex !== activeIndex) {
+    //     //user is scrolling
+    //     this.setState({ activeIndex: visibleIndex });
+    //   }
+    // }
   };
 
-  handleShowNext = () => {
-    const count = React.Children.count(this.props.children);
-    this.transitioning = true;
-    this.setState(({ activeIndex }) => ({
-      activeIndex: (activeIndex + 1) % count
-    }));
-  };
+  // handleShowNext = () => {
+  //   const count = React.Children.count(this.props.children);
+  //   this.transient = true;
+  //   this.setState(({ activeIndex }) => ({
+  //     activeIndex: (activeIndex + 1) % count
+  //   }));
+  // };
 
   render() {
     const { children } = this.props;
-    const { activeIndex } = this.state;
     return (
       <>
-        <button className="next" onClick={this.handleShowNext}>
-          Show Next
-        </button>
-        <div>active Index: {activeIndex}</div>
         <div
           className="container"
           id="swipeable"
