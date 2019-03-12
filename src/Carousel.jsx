@@ -24,7 +24,6 @@ export default class Carousel extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.activeIndex !== this.state.activeIndex) {
-      // this.handleIntersect.cancel();
       const cardRef = this.cardRefs[this.state.activeIndex];
       cardRef.scrollIntoView({
         behavior: "smooth",
@@ -34,7 +33,7 @@ export default class Carousel extends React.Component {
   }
 
   handleIntersect = entries => {
-    const { activeIndex: priorActiveIndex, ignoreUntilComplete } = this.state;
+    const { activeIndex } = this.state;
 
     // card width is 80% of container, so there's only one entry whose isIntersecting=== true
     const inViewEntries = entries.filter(e => e.isIntersecting);
@@ -48,20 +47,20 @@ export default class Carousel extends React.Component {
     const entry = inViewEntries[0];
 
     if (entry.isIntersecting) {
-      const activeIndex = Number(entry.target.getAttribute("data-index"));
-      if (ignoreUntilComplete && activeIndex === priorActiveIndex) {
-        this.setState({ ignoreUntilComplete: false });
-      } else if (!ignoreUntilComplete && activeIndex !== priorActiveIndex) {
-        this.setState({ activeIndex });
+      const visibleIndex = Number(entry.target.getAttribute("data-index"));
+      if (this.transitioning && visibleIndex === activeIndex) {
+        this.transitioning = false;
+      } else if (!this.transitioning && visibleIndex !== activeIndex) {
+        this.setState({ activeIndex: visibleIndex });
       }
     }
   };
 
   handleShowNext = () => {
     const count = React.Children.count(this.props.children);
+    this.transitioning = true;
     this.setState(({ activeIndex }) => ({
-      activeIndex: (activeIndex + 1) % count,
-      ignoreUntilComplete: true
+      activeIndex: (activeIndex + 1) % count
     }));
   };
 
